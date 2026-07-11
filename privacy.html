@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adatvédelmi szabályzat – Anura</title>
+<style>
+  :root {
+    --bg: #F3ECE1;
+    --surface: #FBF8F2;
+    --ink: #2B2622;
+    --ink-soft: #6B6259;
+    --rose-dark: #A96F60;
+    --border: #D9CCB8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.65;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+  a.back {
+    color: var(--rose-dark);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.25rem;
+  }
+  .updated {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+  h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0 0 0.6rem;
+  }
+  p { margin: 0 0 0.7rem; }
+  p:last-child { margin-bottom: 0; }
+  ul { margin: 0.5rem 0 0.7rem; padding-left: 1.2rem; }
+  li { margin-bottom: 0.4rem; }
+  a { color: var(--rose-dark); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; Vissza</a>
+  <h1>Adatvédelmi szabályzat</h1>
+  <p class="updated">Utolsó frissítés: 2026. július 11.</p>
+
+  <section>
+    <h2>1. Kik vagyunk</h2>
+    <p>Ez a szabályzat az Anura alkalmazásra és a hozzá tartozó háttérszolgáltatásokra vonatkozik. Az alkalmazást szépségipari szolgáltatók (pl. fodrászok, kozmetikusok) használják a saját ügyfeleik időpontjainak és üzeneteinek kezelésére.</p>
+    <p>Kapcsolat adatvédelmi kérdésekben: <a href="mailto:rasidhun@icloud.com">rasidhun@icloud.com</a></p>
+  </section>
+
+  <section>
+    <h2>2. Milyen adatokat kezelünk</h2>
+    <p><strong>Az alkalmazást használó szolgáltató adatai:</strong> üzleti profil (üzlet neve, cím, telefonszám, e-mail), amit a szolgáltató saját maga ad meg a Beállítások menüben.</p>
+    <p><strong>Ügyféladatok, amiket a szolgáltató rögzít:</strong> az ügyfelek neve, telefonszáma, e-mail címe, üzenetváltásaik tartalma, valamint a szolgáltató által hozzáadott jegyzetek és címkék.</p>
+    <p><strong>Üzenetek:</strong> a WhatsAppon, SMS-ben, Instagramon vagy Messengeren keresztül érkező és küldött üzenetek szövege, a válaszjavaslatok elkészítéséhez és a kommunikáció megjelenítéséhez.</p>
+    <p><strong>Névjegyek (opcionális):</strong> ha a szolgáltató engedélyezi, az alkalmazás hozzáférhet a készülék névjegyeihez, hogy ügyfélként importálhassa őket. Ez a hozzáférés a szolgáltató saját döntése, és bármikor visszavonható a készülék beállításaiban.</p>
+  </section>
+
+  <section>
+    <h2>3. Hogyan használjuk az adatokat</h2>
+    <ul>
+      <li>Időpontok és ügyféltörzs megjelenítése és kezelése az alkalmazásban</li>
+      <li>A bejövő ügyfélüzenetek szándékának felismerése és válaszjavaslat készítése mesterséges intelligencia segítségével</li>
+      <li>Üzenetek tényleges elküldése a választott csatornán (SMS, WhatsApp, Instagram, Messenger)</li>
+      <li>Naptárkártya (.ics fájl) generálása, amit a szolgáltató megoszthat az ügyféllel</li>
+      <li>Statisztikák (bevétel, kihasználtság) összeállítása a szolgáltató saját adataiból</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4. Kikkel osztjuk meg az adatokat</h2>
+    <p>Az adatokat nem adjuk el és nem osztjuk meg harmadik féllel hirdetési célra. A szolgáltatás működéséhez a következő alvállalkozókat vesszük igénybe:</p>
+    <ul>
+      <li><strong>Anthropic (Claude API)</strong> – a bejövő üzenet szövegét, az ügyfélről megadott releváns kontextust és az üzleti kontextust (szolgáltatások, szabad időpontok) dolgozza fel, hogy válaszjavaslatot készítsen. A szolgáltató által rögzített <em>privát jegyzetek</em> ehhez sosem kerülnek továbbításra.</li>
+      <li><strong>Twilio</strong> – az SMS és WhatsApp üzenetek tényleges kézbesítéséért felel.</li>
+      <li><strong>Apple (App Store / StoreKit)</strong> – az előfizetés kezeléséért és a fizetések feldolgozásáért felel; a fizetési adatokhoz mi magunk nem férünk hozzá.</li>
+      <li><strong>Render</strong> – a háttérszerverünket futtató felhőszolgáltató.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Hol és meddig tároljuk az adatokat</h2>
+    <p>Az ügyféltörzs, az időpontok és az üzenetelőzmények elsődlegesen <strong>a szolgáltató saját készülékén</strong> tárolódnak. A bejövő üzenetek a kézbesítésig ideiglenesen, rövid ideig áthaladnak a háttérszerverünkön, majd az alkalmazás lekéri és törli őket a szerverről.</p>
+    <p>Az adatokat addig őrizzük meg, amíg a szolgáltató használja az alkalmazást. Az alkalmazás törlésével a helyi adatok is törlődnek a készülékről.</p>
+  </section>
+
+  <section>
+    <h2>6. Jogaid</h2>
+    <p>Az Európai Unió Általános Adatvédelmi Rendelete (GDPR) alapján bármikor kérhető:</p>
+    <ul>
+      <li>tájékoztatás a kezelt adatokról</li>
+      <li>az adatok helyesbítése vagy törlése</li>
+      <li>az adatkezelés korlátozása vagy az ellene való tiltakozás</li>
+      <li>az adatok hordozhatósága</li>
+    </ul>
+    <p>Ezekkel kapcsolatban az <a href="mailto:rasidhun@icloud.com">rasidhun@icloud.com</a> címen lehet kapcsolatba lépni.</p>
+  </section>
+
+  <section>
+    <h2>7. Adatbiztonság</h2>
+    <p>Az adatok továbbítása titkosított (HTTPS) kapcsolaton keresztül történik. Az alkalmazáshoz és a háttérszerverhez való hozzáférés jelszóval/API-kulccsal védett.</p>
+  </section>
+
+  <section>
+    <h2>8. Gyermekek adatai</h2>
+    <p>Az alkalmazást nem gyermekeknek szánjuk, és tudatosan nem gyűjtünk adatot 16 éven aluliaktól.</p>
+  </section>
+
+  <section>
+    <h2>9. A szabályzat módosítása</h2>
+    <p>Ezt a szabályzatot időről időre frissíthetjük, ha az alkalmazás funkciói bővülnek. A jelentős változásokról az alkalmazáson keresztül tájékoztatást adunk.</p>
+  </section>
+</div>
+</body>
+</html>
