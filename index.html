@@ -4,132 +4,446 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anura – AI-asszisztens szépségipari vállalkozásoknak</title>
-<meta name="description" content="Az Anura naptárt, ügyfélkezelést és AI-alapú üzenetkezelést kínál fodrászoknak, kozmetikusoknak és más szépségipari szolgáltatóknak.">
+<meta name="description" content="Az Anura AI-válaszjavaslatot ad minden bejövő ügyfélüzenetre, automatikusan foglal a naptárba, és egy koppintással a jóváhagyás a tiéd. Naptár, ügyféltörzs és statisztika egyetlen felületen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F3ECE1;
-    --surface: #FBF8F2;
-    --ink: #2B2622;
-    --ink-soft: #6B6259;
-    --rose: #C1897A;
-    --rose-dark: #A96F60;
-    --border: #D9CCB8;
+    --navy-top: #101B33;
+    --navy-bottom: #060B18;
+    --gold-light: #F7DFA6;
+    --gold-mid: #E3B45E;
+    --gold-dark: #B8842C;
+    --text-1: #ffffff;
+    --text-2: rgba(255,255,255,.62);
+    --text-3: rgba(255,255,255,.45);
+    --text-4: rgba(255,255,255,.35);
+    --card-bg: rgba(255,255,255,.03);
+    --card-border: rgba(255,255,255,.08);
+    --gold-card-bg: rgba(227,180,94,.08);
+    --gold-card-border: rgba(227,180,94,.35);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
+    background: #060B18;
+    color: var(--text-1);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
   }
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 4rem 1.5rem 3rem;
+  a { color: var(--gold-mid); text-decoration: none; }
+  a:hover { color: var(--gold-light); }
+  ::selection { background: rgba(227,180,94,.3); }
+  .serif { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 600; }
+  .gold-text {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-mid), var(--gold-dark));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  header {
-    text-align: center;
-    margin-bottom: 3rem;
+  .gold-bg { background: linear-gradient(135deg, var(--gold-light), var(--gold-mid), var(--gold-dark)); }
+  .eyebrow {
+    font: 600 11px Inter, sans-serif; color: var(--gold-mid);
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
   }
-  .badge {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 1.25rem;
-    border-radius: 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .section-title { font-size: 38px; line-height: 1.2; color: #fff; margin: 0; }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .btn-gold {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: #100E1A; font: 600 15px Inter, sans-serif;
+    padding: 15px 28px; border-radius: 28px;
+    box-shadow: 0 14px 34px rgba(212,177,90,.28);
+    border: none; cursor: pointer;
   }
-  .badge svg { width: 44px; height: 44px; }
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.01em;
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(255,255,255,.2); color: #fff;
+    font: 500 15px Inter, sans-serif; padding: 15px 26px; border-radius: 28px;
   }
-  .tagline {
-    color: var(--ink-soft);
-    font-size: 1.1rem;
-    margin: 0;
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 20px; padding: 30px;
   }
-  section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.75rem 2rem;
-    margin-bottom: 1.5rem;
+  .wrap { max-width: 1180px; margin: 0 auto; padding-left: 6vw; padding-right: 6vw; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 6vw; background: rgba(6,11,24,.75);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
   }
-  h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 0.75rem;
+  nav .brand { display: flex; align-items: center; gap: 10px; }
+  nav .brand span { font: italic 600 21px "Cormorant Garamond", Georgia, serif; }
+  nav .links { display: flex; align-items: center; gap: 36px; }
+  nav .links a { font: 500 14px Inter, sans-serif; color: rgba(255,255,255,.7); }
+  nav .cta { color: #100E1A; font: 600 13.5px Inter, sans-serif; padding: 10px 20px; border-radius: 24px; }
+  @media (max-width: 720px) { nav .links { display: none; } }
+
+  /* HERO */
+  .hero {
+    position: relative; display: flex; align-items: center; justify-content: space-between;
+    gap: 60px; padding: 90px 6vw 90px; flex-wrap: wrap;
   }
-  p { margin: 0 0 0.75rem; color: var(--ink); }
-  p:last-child { margin-bottom: 0; }
-  ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
-  li { margin-bottom: 0.4rem; }
-  footer {
-    text-align: center;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+  .hero-copy { flex: 1; min-width: 320px; max-width: 560px; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(227,180,94,.1); border: 1px solid rgba(227,180,94,.3);
+    border-radius: 20px; padding: 6px 14px; margin-bottom: 26px;
+    font: 600 11px Inter, sans-serif; color: var(--gold-mid); letter-spacing: .04em;
   }
-  footer a {
-    color: var(--rose-dark);
-    text-decoration: none;
-    font-weight: 500;
-    margin: 0 0.75rem;
+  .hero h1 { font-size: 52px; line-height: 1.1; margin: 0 0 24px; }
+  .hero p.lead { font: 400 17px/1.7 Inter, sans-serif; color: var(--text-2); margin: 0 0 36px; max-width: 480px; }
+  .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .trust-row { display: flex; gap: 32px; margin-top: 52px; flex-wrap: wrap; }
+  .trust-row .num { font: 700 22px Inter, sans-serif; color: #fff; }
+  .trust-row .label { font: 400 12.5px Inter, sans-serif; color: var(--text-3); max-width: 160px; }
+
+  /* Phone frame (pure CSS) */
+  .phone {
+    position: relative; width: 232px; height: 480px; border-radius: 34px;
+    background: #060B18; box-shadow: 0 50px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(227,180,94,.15);
+    padding: 10px; flex: none;
   }
-  footer a:hover { text-decoration: underline; }
-  .muted {
-    color: var(--ink-soft);
-    font-size: 0.85rem;
-    margin-top: 1rem;
+  .phone.small { width: 190px; height: 400px; border-radius: 28px; }
+  .phone-screen {
+    position: relative; width: 100%; height: 100%; border-radius: 26px; overflow: hidden;
+    background: linear-gradient(165deg, var(--navy-top) 0%, var(--navy-bottom) 68%);
+    display: flex; flex-direction: column;
+  }
+  .phone.small .phone-screen { border-radius: 21px; }
+  .phone-notch {
+    position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 18px; background: #060B18; border-radius: 10px; z-index: 2;
+  }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+  }
+  .feature-icon {
+    width: 46px; height: 46px; border-radius: 12px; background: rgba(227,180,94,.12);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+  }
+  .feature-title { font: 600 17px Inter, sans-serif; color: #fff; margin-bottom: 10px; }
+  .feature-body { font: 400 14px/1.7 Inter, sans-serif; color: rgba(255,255,255,.55); }
+
+  /* SCREENSHOTS */
+  .screens {
+    position: relative; background: linear-gradient(180deg, rgba(227,180,94,.05), transparent);
+    padding: 90px 6vw;
+  }
+  .screens-row { display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+  .screen-item { text-align: center; }
+  .screen-caption { margin-top: 16px; font: 500 13px Inter, sans-serif; color: rgba(255,255,255,.5); }
+
+  /* PRICING */
+  .pricing-trial {
+    text-align: center; display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(227,180,94,.1); border: 1px solid rgba(227,180,94,.3);
+    border-radius: 20px; padding: 8px 18px; font: 600 13px Inter, sans-serif; color: var(--gold-mid);
+    margin: 0 auto 40px; display: flex; width: fit-content;
+  }
+  .pricing-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+  .price-card {
+    flex: 1; min-width: 280px; max-width: 360px; border-radius: 22px; padding: 36px; position: relative;
+  }
+  .price-card.plain { background: var(--card-bg); border: 1px solid var(--card-border); }
+  .price-card.featured { background: var(--gold-card-bg); border: 1px solid var(--gold-card-border); }
+  .price-badge {
+    position: absolute; top: -13px; right: 28px; color: #100E1A;
+    font: 700 10.5px Inter, sans-serif; padding: 5px 12px; border-radius: 14px;
+  }
+  .price-card .plan-name { font: 600 20px Inter, sans-serif; color: #fff; margin-bottom: 6px; }
+  .price-card .plan-price { font: 700 32px Inter, sans-serif; margin-bottom: 4px; }
+  .price-card .plan-note { font: 400 13px Inter, sans-serif; color: var(--text-3); margin-bottom: 24px; }
+  .price-card .plan-features { display: flex; flex-direction: column; gap: 12px; font: 400 14px Inter, sans-serif; }
+  .price-card.plain .plan-features { color: rgba(255,255,255,.65); }
+  .price-card.featured .plan-features { color: rgba(255,255,255,.85); }
+
+  /* CTA */
+  .cta-section {
+    position: relative; text-align: center; padding: 100px 6vw;
+    background: radial-gradient(ellipse at center, rgba(227,180,94,.1), transparent 70%);
+  }
+  .cta-section h2 { font-size: 42px; margin: 0 0 20px; }
+  .cta-section p { font: 400 16px/1.7 Inter, sans-serif; color: var(--text-2); max-width: 480px; margin: 0 auto 36px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid rgba(255,255,255,.07); padding: 56px 6vw 40px; }
+  .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+  .footer-brand { max-width: 320px; }
+  .footer-brand-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .footer-brand-row span { font: italic 600 17px "Cormorant Garamond", Georgia, serif; color: #fff; }
+  .footer-tagline { font: 400 13.5px/1.7 Inter, sans-serif; color: rgba(255,255,255,.4); }
+  .footer-cols { display: flex; gap: 56px; flex-wrap: wrap; }
+  .footer-col-title {
+    font: 600 12px Inter, sans-serif; color: rgba(255,255,255,.4);
+    letter-spacing: .05em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .footer-col a { display: block; color: rgba(255,255,255,.65); font: 400 14px Inter, sans-serif; margin-bottom: 10px; }
+  .footer-bottom {
+    max-width: 1180px; margin: 40px auto 0; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,.06); font: 400 12.5px Inter, sans-serif; color: rgba(255,255,255,.3);
   }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="badge">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="20" y="18" width="60" height="42" rx="14" fill="none" stroke="#2B2622" stroke-width="3.5"/>
-        <path d="M35,58 L27,76 L44,58" fill="none" stroke="#2B2622" stroke-width="3.5" stroke-linejoin="round"/>
-        <rect x="38" y="30" width="24" height="20" rx="3" fill="none" stroke="#2B2622" stroke-width="1.5"/>
-        <path d="M45,26 L45,32" stroke="#2B2622" stroke-width="2" stroke-linecap="round"/>
-        <path d="M55,26 L55,32" stroke="#2B2622" stroke-width="2" stroke-linecap="round"/>
-        <path d="M38,38 L62,38" stroke="#2B2622" stroke-width="1"/>
-        <circle cx="50" cy="45" r="3" fill="#C1897A"/>
-      </svg>
+
+<!-- watermark -->
+<svg width="900" height="900" viewBox="0 0 1024 1024" style="position:fixed;top:-260px;right:-320px;opacity:.05;pointer-events:none;z-index:0">
+  <defs><linearGradient id="wgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7DFA6"/><stop offset=".5" stop-color="#E3B45E"/><stop offset="1" stop-color="#B8842C"/></linearGradient></defs>
+  <circle cx="512" cy="512" r="330" fill="none" stroke="url(#wgold)" stroke-width="20" stroke-linecap="round" stroke-dasharray="1600 480" transform="rotate(-50 512 512)"/>
+  <circle cx="512" cy="512" r="374" fill="none" stroke="url(#wgold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="800 1550" transform="rotate(120 512 512)"/>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 1024 1024">
+      <defs><linearGradient id="navg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7DFA6"/><stop offset=".5" stop-color="#E3B45E"/><stop offset="1" stop-color="#B8842C"/></linearGradient></defs>
+      <circle cx="512" cy="512" r="330" fill="none" stroke="url(#navg)" stroke-width="60" stroke-linecap="round" stroke-dasharray="1600 480" transform="rotate(-50 512 512)"/>
+      <text x="512" y="668" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="450" fill="url(#navg)">A</text>
+    </svg>
+    <span class="gold-text">Anura</span>
+  </div>
+  <div class="links">
+    <a href="#funkciok">Funkciók</a>
+    <a href="#screenshots">Alkalmazás</a>
+    <a href="#arazas">Árazás</a>
+    <a href="#kapcsolat">Kapcsolat</a>
+  </div>
+  <a href="#letoltes" class="cta gold-bg">Hamarosan</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-copy">
+    <div class="hero-badge">✦ AI-VEZÉRELT ÜGYFÉLKEZELÉS</div>
+    <h1 class="serif" style="background:linear-gradient(135deg,#fff 40%,#E3B45E 120%);-webkit-background-clip:text;background-clip:text;color:transparent">Az asszisztensed, ami sosem alszik.</h1>
+    <p class="lead">Az Anura AI-válaszjavaslatot ad minden bejövő ügyfélüzenetre — te pedig egy koppintással jóváhagyod, szerkeszted vagy elveted. Naptár, ügyféltörzs és statisztika egyetlen luxus felületen.</p>
+    <div class="actions">
+      <a href="#kapcsolat" class="btn-gold gold-bg">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="#100E1A"><path d="M16.5 1c.1 1.3-.4 2.5-1.1 3.4-.8.9-2 1.6-3.2 1.5-.1-1.2.5-2.5 1.2-3.3.8-.9 2.1-1.5 3.1-1.6zM20.6 17.2c-.5 1.2-.8 1.7-1.5 2.7-1 1.4-2.3 3.2-4 3.2-1.5 0-1.9-1-3.9-1-2 0-2.5 1-4 1-1.7 0-3-1.6-4-3-2.7-3.9-3-8.5-1.3-11 1.2-1.8 3-2.8 4.7-2.8 1.7 0 2.8 1 4.2 1 1.4 0 2.2-1 4.2-1 1.5 0 3.1.8 4.2 2.2-3.7 2-3.1 7.3 1.4 8.7z"/></svg>
+        Hamarosan az App Store-ban
+      </a>
+      <a href="#screenshots" class="btn-outline">Nézd meg működés közben</a>
     </div>
-    <h1>Anura</h1>
-    <p class="tagline">AI-asszisztens szépségipari vállalkozásoknak</p>
-  </header>
+    <div class="trust-row">
+      <div><div class="num">0%</div><div class="label">jutalék és rejtett díj</div></div>
+      <div><div class="num">14 nap</div><div class="label">ingyenes próbaidő</div></div>
+      <div><div class="num">100%</div><div class="label">magyar nyelvű AI</div></div>
+    </div>
+  </div>
 
-  <section>
-    <h2>Mit tud az Anura?</h2>
-    <p>Az Anura segít a fodrászoknak, kozmetikusoknak és más szépségipari szolgáltatóknak összefogni a mindennapi adminisztrációt egyetlen alkalmazásban:</p>
-    <ul>
-      <li>Naptár és időpontkezelés, szabad idősávok kiszámításával</li>
-      <li>Ügyféltörzs elérhetőségekkel, jegyzetekkel és előzményekkel</li>
-      <li>AI-alapú válaszjavaslatok a bejövő ügyfélüzenetekre (WhatsApp, SMS, Instagram, Messenger)</li>
-      <li>Statisztikák a bevételről és a kihasználtságról</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Emberi felügyelet mindenhol</h2>
-    <p>Az AI sosem küld üzenetet a szolgáltató jóváhagyása nélkül, hacsak a szolgáltató kifejezetten be nem kapcsolja a magas megbízhatóságú válaszok automatikus küldését. Minden javaslat szerkeszthető vagy elvethető.</p>
-  </section>
-
-  <footer>
-    <a href="privacy.html">Adatvédelmi szabályzat</a>
-    <a href="mailto:rasidhun@icloud.com">Kapcsolat</a>
-    <p class="muted">© 2026 Anura</p>
-  </footer>
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div style="padding:44px 16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)">
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(227,180,94,.14);border:1px solid rgba(227,180,94,.4);display:flex;align-items:center;justify-content:center;font:600 10px Inter,sans-serif;color:#E3B45E">KN</div>
+        <div style="font:600 12px Inter,sans-serif;color:#fff">Kovács Nóra</div>
+      </div>
+      <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="align-self:flex-start;max-width:80%;background:rgba(255,255,255,.08);color:#fff;font-size:9.5px;line-height:1.4;padding:6px 9px;border-radius:10px">Szia! Kérnék időpontot péntekre.</div>
+        <div style="background:rgba(227,180,94,.1);border:1px solid rgba(227,180,94,.35);border-radius:11px;padding:9px;display:flex;flex-direction:column;gap:6px;margin-top:4px">
+          <div style="font:700 8px Inter,sans-serif;color:#E3B45E;letter-spacing:.03em">✦ AI JAVASLAT · 92%</div>
+          <div style="font-size:9.5px;line-height:1.4;color:rgba(255,255,255,.85)">Szia Nóra! Persze, péntek 14:00 szabad — foglaljam?</div>
+          <div style="display:flex;gap:5px">
+            <div class="gold-bg" style="flex:1;text-align:center;color:#100E1A;font:600 7.5px Inter,sans-serif;padding:6px;border-radius:7px">Jóváhagyás</div>
+            <div style="flex:1;text-align:center;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);font:500 7.5px Inter,sans-serif;padding:6px;border-radius:7px">Szerkeszt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- FUNKCIÓK -->
+<div id="funkciok" class="wrap" style="padding-top:60px;padding-bottom:90px">
+  <div class="section-head">
+    <div class="eyebrow">Funkciók</div>
+    <h2 class="serif section-title">Minden, amire egy prémium szolgáltatónak szüksége van</h2>
+  </div>
+  <div class="features-grid">
+    <div class="card">
+      <div class="feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M4 5h16a1 1 0 011 1v10a1 1 0 01-1 1H9l-5 4V6a1 1 0 011-1z" stroke="#E3B45E" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 9v5M9.5 11.5h5" stroke="#E3B45E" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div class="feature-title">AI-válaszjavaslatok</div>
+      <div class="feature-body">Minden bejövő üzenetre az AI azonnal választ javasol — Messenger, Instagram és Telegram csatornákon. Te jóváhagysz, szerkesztesz vagy elvetsz.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="3" stroke="#E3B45E" stroke-width="1.7"/><path d="M3 10h18" stroke="#E3B45E" stroke-width="1.7"/><path d="M8 3v4M16 3v4" stroke="#E3B45E" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div class="feature-title">Intelligens naptár</div>
+      <div class="feature-body">Automatikus szabad idősáv-javaslat, nyitvatartás és szabadságok kezelése, dupla-foglalás védelem — a beszélgetésből egyenesen a naptárba.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="8" r="3" stroke="#E3B45E" stroke-width="1.6"/><circle cx="16" cy="9" r="2.4" stroke="#E3B45E" stroke-width="1.6"/><path d="M2.5 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#E3B45E" stroke-width="1.6"/><path d="M14.5 14.3c2.6.4 4.5 2.6 4.5 5.7" stroke="#E3B45E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="feature-title">Teljes ügyféltörzs</div>
+      <div class="feature-body">Elérhetőségek, címkék, privát jegyzetek és AI-kontextus — hogy az asszisztens ismerje a stílusodat és az ügyfeleid igényeit.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M11 20V4M18 20v-7" stroke="#E3B45E" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+      <div class="feature-title">Éles statisztikák</div>
+      <div class="feature-body">Bevétel, kihasználtság, no-show arány és legjövedelmezőbb szolgáltatások — mindig friss adatok, egy pillantással.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div id="screenshots" class="screens">
+  <div class="section-head">
+    <div class="eyebrow">Az alkalmazás</div>
+    <h2 class="serif section-title">Elegáns felület, minden képernyőn</h2>
+  </div>
+  <div class="screens-row">
+
+    <div class="screen-item">
+      <div class="phone small">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div style="padding:34px 14px 8px;display:flex;align-items:center;justify-content:space-between">
+            <div class="serif" style="font-size:18px;color:#fff">Naptár</div>
+            <div class="gold-bg" style="width:22px;height:22px;border-radius:7px"></div>
+          </div>
+          <div style="padding:8px 14px;display:flex;gap:4px;justify-content:space-between">
+            <div style="flex:1;text-align:center;padding:6px 0;border-radius:8px;font:500 8px Inter,sans-serif;color:rgba(255,255,255,.4)">H<br><span style="color:#fff;font-weight:600">28</span></div>
+            <div class="gold-bg" style="flex:1;text-align:center;padding:6px 0;border-radius:8px;font:600 8px Inter,sans-serif;color:#100E1A">K<br>29</div>
+            <div style="flex:1;text-align:center;padding:6px 0;border-radius:8px;font:500 8px Inter,sans-serif;color:rgba(255,255,255,.4)">Sze<br><span style="color:#fff;font-weight:600">30</span></div>
+            <div style="flex:1;text-align:center;padding:6px 0;border-radius:8px;font:500 8px Inter,sans-serif;color:rgba(255,255,255,.4)">Cs<br><span style="color:#fff;font-weight:600">31</span></div>
+          </div>
+          <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:9px">
+              <div style="width:2.5px;background:#6FCF97;border-radius:2px"></div>
+              <div><div style="font:600 10.5px Inter,sans-serif;color:#fff">Manikűr</div><div style="font:400 8.5px Inter,sans-serif;color:rgba(255,255,255,.4)">09:00–10:00</div></div>
+            </div>
+            <div style="display:flex;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:9px">
+              <div style="width:2.5px;background:#E8A33D;border-radius:2px"></div>
+              <div><div style="font:600 10.5px Inter,sans-serif;color:#fff">Hajvágás + Festés</div><div style="font:400 8.5px Inter,sans-serif;color:rgba(255,255,255,.4)">14:00–16:00 · ✦AI</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-caption">Naptár</div>
+    </div>
+
+    <div class="screen-item">
+      <div class="phone small">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="serif" style="padding:34px 14px 10px;font-size:18px;color:#fff">Beszélgetések</div>
+          <div style="padding:0 14px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:9px 11px">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(227,180,94,.14);border:1px solid rgba(227,180,94,.4);display:flex;align-items:center;justify-content:center;font:600 10px Inter,sans-serif;color:#E3B45E">KN</div>
+              <div style="flex:1"><div style="font:600 11px Inter,sans-serif;color:#fff">Kovács Nóra</div><div style="font:400 9px Inter,sans-serif;color:rgba(255,255,255,.45)">Szia! Kérnék időpontot...</div></div>
+              <div style="width:15px;height:15px;border-radius:50%;background:#E8A33D;display:flex;align-items:center;justify-content:center;font:700 8px Inter,sans-serif;color:#100E1A">1</div>
+            </div>
+            <div style="display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:9px 11px">
+              <div style="width:30px;height:30px;border-radius:50%;background:rgba(227,180,94,.14);border:1px solid rgba(227,180,94,.4);display:flex;align-items:center;justify-content:center;font:600 10px Inter,sans-serif;color:#E3B45E">TE</div>
+              <div style="flex:1"><div style="font:600 11px Inter,sans-serif;color:#fff">Tóth Enikő</div><div style="font:400 9px Inter,sans-serif;color:rgba(255,255,255,.45)">Köszi, ott leszek!</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-caption">Beszélgetések</div>
+    </div>
+
+    <div class="screen-item">
+      <div class="phone small">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="serif" style="padding:34px 14px 12px;font-size:18px;color:#fff">Statisztika</div>
+          <div style="padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px"><div style="font:700 15px Inter,sans-serif;color:#fff">31 500 Ft</div><div style="font:400 8.5px Inter,sans-serif;color:rgba(255,255,255,.4)">Bevétel</div></div>
+            <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px"><div style="font:700 15px Inter,sans-serif;color:#fff">72%</div><div style="font:400 8.5px Inter,sans-serif;color:rgba(255,255,255,.4)">Kihasználtság</div></div>
+          </div>
+          <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px">
+              <div><div style="font:500 10.5px Inter,sans-serif;color:#fff">Hajvágás + Festés</div><div style="font:400 8.5px Inter,sans-serif;color:rgba(255,255,255,.4)">1× teljesítve</div></div>
+              <div style="font:600 10.5px Inter,sans-serif;color:#E3B45E">24 000 Ft</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-caption">Statisztika</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ÁRAZÁS -->
+<div id="arazas" class="wrap" style="max-width:900px;padding-top:90px;padding-bottom:90px">
+  <div class="section-head">
+    <div class="eyebrow">Árazás</div>
+    <h2 class="serif section-title">Válaszd ki a hozzád illőt</h2>
+  </div>
+  <div class="pricing-trial">✦ 14 nap ingyenes próbaidő, minden csomagnál</div>
+  <div class="pricing-cards">
+    <div class="price-card plain">
+      <div class="plan-name">Egyéni</div>
+      <div class="plan-price gold-text">9 990 Ft<span style="font-size:15px;color:rgba(255,255,255,.5)"> + áfa / hó</span></div>
+      <div class="plan-note">1 felhasználónak</div>
+      <div class="plan-features">
+        <div>✓ Minden AI-funkció</div>
+        <div>✓ Korlátlan üzenet és foglalás</div>
+        <div>✓ Naptár, ügyféltörzs, statisztika</div>
+        <div>✓ Nincs jutalék, nincs rejtett díj</div>
+      </div>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge gold-bg">LEGNÉPSZERŰBB</div>
+      <div class="plan-name">Szalon</div>
+      <div class="plan-price gold-text">19 990 Ft<span style="font-size:15px;color:rgba(255,255,255,.5)"> + áfa / hó</span></div>
+      <div class="plan-note">5 felhasználóig · +2 000 Ft + áfa / hó minden további főre</div>
+      <div class="plan-features">
+        <div>✓ Minden az Egyéniből</div>
+        <div>✓ 5 felhasználó, közös naptár</div>
+        <div>✓ Csapat-beszélgetések</div>
+        <div>✓ Nincs jutalék, nincs rejtett díj</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div id="letoltes" class="cta-section">
+  <h2 class="serif">Kezdj hozzá még ma.</h2>
+  <p>Az Anura hamarosan elérhető az App Store-ban. Írj nekünk, és elsőként értesítünk az indulásról.</p>
+  <a href="mailto:rasidhun@icloud.com?subject=Anura%20-%20%C3%A9rtes%C3%ADts%20az%20ind%C3%BAl%C3%A1sr%C3%B3l" class="btn-gold gold-bg">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7l9 6 9-6" stroke="#100E1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="2" stroke="#100E1A" stroke-width="1.8"/></svg>
+    Értesülj az indulásról
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer id="kapcsolat">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-row">
+        <svg width="20" height="20" viewBox="0 0 1024 1024">
+          <defs><linearGradient id="footg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F7DFA6"/><stop offset=".5" stop-color="#E3B45E"/><stop offset="1" stop-color="#B8842C"/></linearGradient></defs>
+          <circle cx="512" cy="512" r="330" fill="none" stroke="url(#footg)" stroke-width="60" stroke-linecap="round" stroke-dasharray="1600 480" transform="rotate(-50 512 512)"/>
+          <text x="512" y="668" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="450" fill="url(#footg)">A</text>
+        </svg>
+        <span>Anura</span>
+      </div>
+      <div class="footer-tagline">AI-asszisztens szépségipari vállalkozásoknak. Az AI sosem küld üzenetet jóváhagyás nélkül.</div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Termék</div>
+        <a href="#funkciok">Funkciók</a>
+        <a href="#screenshots">Alkalmazás</a>
+        <a href="#arazas">Árazás</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Jogi</div>
+        <a href="privacy.html">Adatvédelmi szabályzat</a>
+        <a href="mailto:rasidhun@icloud.com">Kapcsolat</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Anura. Minden jog fenntartva.</div>
+</footer>
+
 </body>
 </html>
