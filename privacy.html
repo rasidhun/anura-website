@@ -65,7 +65,7 @@
 <div class="wrap">
   <a class="back" href="index.html">&larr; Vissza</a>
   <h1>Adatvédelmi szabályzat</h1>
-  <p class="updated">Utolsó frissítés: 2026. július 11.</p>
+  <p class="updated">Utolsó frissítés: 2026. augusztus 3.</p>
 
   <section>
     <h2>1. Kik vagyunk</h2>
@@ -77,7 +77,7 @@
     <h2>2. Milyen adatokat kezelünk</h2>
     <p><strong>Az alkalmazást használó szolgáltató adatai:</strong> üzleti profil (üzlet neve, cím, telefonszám, e-mail), amit a szolgáltató saját maga ad meg a Beállítások menüben.</p>
     <p><strong>Ügyféladatok, amiket a szolgáltató rögzít:</strong> az ügyfelek neve, telefonszáma, e-mail címe, üzenetváltásaik tartalma, valamint a szolgáltató által hozzáadott jegyzetek és címkék.</p>
-    <p><strong>Üzenetek:</strong> a WhatsAppon, SMS-ben, Instagramon vagy Messengeren keresztül érkező és küldött üzenetek szövege, a válaszjavaslatok elkészítéséhez és a kommunikáció megjelenítéséhez.</p>
+    <p><strong>Üzenetek:</strong> a WhatsAppon, SMS-ben, Instagramon, Messengeren vagy Telegramon keresztül érkező és küldött üzenetek szövege, a válaszjavaslatok elkészítéséhez és a kommunikáció megjelenítéséhez.</p>
     <p><strong>Névjegyek (opcionális):</strong> ha a szolgáltató engedélyezi, az alkalmazás hozzáférhet a készülék névjegyeihez, hogy ügyfélként importálhassa őket. Ez a hozzáférés a szolgáltató saját döntése, és bármikor visszavonható a készülék beállításaiban.</p>
   </section>
 
@@ -86,7 +86,7 @@
     <ul>
       <li>Időpontok és ügyféltörzs megjelenítése és kezelése az alkalmazásban</li>
       <li>A bejövő ügyfélüzenetek szándékának felismerése és válaszjavaslat készítése mesterséges intelligencia segítségével</li>
-      <li>Üzenetek tényleges elküldése a választott csatornán (SMS, WhatsApp, Instagram, Messenger)</li>
+      <li>Üzenetek tényleges elküldése a választott csatornán (SMS, WhatsApp, Instagram, Messenger, Telegram)</li>
       <li>Naptárkártya (.ics fájl) generálása, amit a szolgáltató megoszthat az ügyféllel</li>
       <li>Statisztikák (bevétel, kihasználtság) összeállítása a szolgáltató saját adataiból</li>
     </ul>
@@ -97,6 +97,8 @@
     <p>Az adatokat nem adjuk el és nem osztjuk meg harmadik féllel hirdetési célra. A szolgáltatás működéséhez a következő alvállalkozókat vesszük igénybe:</p>
     <ul>
       <li><strong>Anthropic (Claude API)</strong> – a bejövő üzenet szövegét, az ügyfélről megadott releváns kontextust és az üzleti kontextust (szolgáltatások, szabad időpontok) dolgozza fel, hogy válaszjavaslatot készítsen. A szolgáltató által rögzített <em>privát jegyzetek</em> ehhez sosem kerülnek továbbításra.</li>
+      <li><strong>Meta Platforms (Messenger, Instagram)</strong> – ha a szolgáltató bekötötte a Facebook Oldalát vagy Instagram-fiókját, az ezeken a csatornákon érkező és küldött üzenetek a Meta rendszerén keresztül haladnak. A Meta saját adatkezelési szabályzata is vonatkozik rájuk.</li>
+      <li><strong>Telegram</strong> – ha a szolgáltató bekötött egy Telegram-botot, az ezen a csatornán érkező és küldött üzenetek a Telegram rendszerén keresztül haladnak.</li>
       <li><strong>Twilio</strong> – az SMS és WhatsApp üzenetek tényleges kézbesítéséért felel.</li>
       <li><strong>Apple (App Store / StoreKit)</strong> – az előfizetés kezeléséért és a fizetések feldolgozásáért felel; a fizetési adatokhoz mi magunk nem férünk hozzá.</li>
       <li><strong>Render</strong> – a háttérszerverünket futtató felhőszolgáltató.</li>
@@ -105,8 +107,10 @@
 
   <section>
     <h2>5. Hol és meddig tároljuk az adatokat</h2>
-    <p>Az ügyféltörzs, az időpontok és az üzenetelőzmények elsődlegesen <strong>a szolgáltató saját készülékén</strong> tárolódnak. A bejövő üzenetek a kézbesítésig ideiglenesen, rövid ideig áthaladnak a háttérszerverünkön, majd az alkalmazás lekéri és törli őket a szerverről.</p>
-    <p>Az adatokat addig őrizzük meg, amíg a szolgáltató használja az alkalmazást. Az alkalmazás törlésével a helyi adatok is törlődnek a készülékről.</p>
+    <p><strong>A háttérszerverünkön</strong> tároljuk: a fiókadatokat (név, e-mail, titkosított jelszó), a bekötött csatornákat, a beszélgetéseket (a bejövő és az elküldött üzeneteket), az időpontokat, a szolgáltatás-katalógust és az üzleti beállításokat (nyitvatartás, hangnem). Ez teszi lehetővé, hogy a szolgáltató több eszközről is elérje ugyanazokat az adatokat, és hogy egy szalonban több munkatárs közösen dolgozhasson.</p>
+    <p><strong>A szolgáltató készülékén</strong> tároljuk ezek helyi másolatát, valamint az ügyféltörzset (telefonszám, e-mail, címkék) és a privát jegyzeteket. A privát jegyzetek nem kerülnek fel a szerverre, és az AI-nak sem küldjük el őket.</p>
+    <p>A háttérszerverünk (Render) az <strong>Amerikai Egyesült Államokban</strong> működik, így az adatok az Európai Unión kívülre kerülnek; a szolgáltatóink megfelelő adatvédelmi garanciákat vállalnak.</p>
+    <p>Az adatokat addig őrizzük meg, amíg a szolgáltató használja az alkalmazást. A <strong>fiók törlésével</strong> (az alkalmazásban: Beállítások → Fiók → Fiók végleges törlése) a szerveren tárolt összes adat véglegesen törlődik, az alkalmazás törlésével pedig a készüléken tárolt adatok is.</p>
   </section>
 
   <section>
@@ -118,7 +122,7 @@
       <li>az adatkezelés korlátozása vagy az ellene való tiltakozás</li>
       <li>az adatok hordozhatósága</li>
     </ul>
-    <p>Ezekkel kapcsolatban az <a href="mailto:rasidhun@icloud.com">rasidhun@icloud.com</a> címen lehet kapcsolatba lépni.</p>
+    <p>A fiók és a hozzá tartozó összes adat <strong>bármikor, azonnal törölhető magában az alkalmazásban</strong>: Beállítások → Fiók → Fiók végleges törlése. Egyéb kérésekkel az <a href="mailto:rasidhun@icloud.com">rasidhun@icloud.com</a> címen lehet kapcsolatba lépni.</p>
   </section>
 
   <section>
