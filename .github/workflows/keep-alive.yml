@@ -14,18 +14,27 @@ name: Backend ébren tartása
 
 on:
   schedule:
-    - cron: "3 */5 * * *"   # 5 óránként indul (a 3. percben)
+    - cron: "7 * * * *"     # óránként indul (a 7. percben)
   workflow_dispatch: {}
+
+# A hosszan futó munkákat a GitHub néha elvonja ("cancelled"). Rövidebb futásokkal
+# ez ritkább, és az átfedő futások ne szakítsák meg egymást.
+concurrency:
+  group: keep-warm
+  cancel-in-progress: false
 
 jobs:
   keep-warm:
     runs-on: ubuntu-latest
-    # A GitHub munka-limit 6 óra; ez alatt maradunk, és 5 óránként újraindulunk.
-    timeout-minutes: 350
+    # Rövid futás: kisebb esély arra, hogy a GitHub elvonja a runnert.
+    timeout-minutes: 60
+    # Ha a futást mégis megszakítják, az ne jelentsen hibát (és ne jöjjön róla levél):
+    # a következő óra új futása pótolja.
+    continue-on-error: true
     steps:
-      - name: Ping /health 4 percenként ~5 óra 45 percig
+      - name: Ping /health 4 percenként ~55 percig
         run: |
-          end=$((SECONDS + 20700))   # 345 perc = 5h45m
+          end=$((SECONDS + 3300))    # 55 perc
           while [ "$SECONDS" -lt "$end" ]; do
             code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 120 https://anura-1apx.onrender.com/health || echo "000")
             echo "$(date -u +%H:%M:%S) Backend: HTTP $code"
