@@ -12,9 +12,12 @@
 # GitHub Actions percek ingyenesek és korlátlanok.
 name: Backend ébren tartása
 
+# Az ütemezés KIKAPCSOLVA (2026-08-07): a hosszan futó ping-munka elvette a
+# GitHub-runner kapacitást a weboldal Pages-buildje elől, és "cancelled"
+# hibaleveleket generált. A Render fizetős csomagján a szerver nem alszik el,
+# ezért erre a kerülőútra nincs is szükség - a váltás után ez a fájl törölhető.
+# Addig kézzel indítható (Actions → Run workflow), ha épp kell egy ébresztés.
 on:
-  schedule:
-    - cron: "7 * * * *"     # óránként indul (a 7. percben)
   workflow_dispatch: {}
 
 # A hosszan futó munkákat a GitHub néha elvonja ("cancelled"). Rövidebb futásokkal
