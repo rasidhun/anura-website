@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Új jelszó – Anura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold-light: #F7DFA6; --gold-mid: #E3B45E; --gold-dark: #B8842C;
+      --bg: #060B18; --card: #101B33; --text: #F5F5F7; --muted: #9AA3B2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(180deg, #101B33 0%, #060B18 100%);
+      color: var(--text); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 24px;
+    }
+    .kartya {
+      width: 100%; max-width: 420px; background: rgba(255,255,255,.04);
+      border: 1px solid rgba(227,180,94,.25); border-radius: 18px; padding: 32px 28px;
+    }
+    h1 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 30px; margin: 0 0 6px; color: var(--gold-light); }
+    p.alcim { margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    label { display: block; font-size: 13px; color: var(--muted); margin: 16px 0 6px; }
+    input[type=password] {
+      width: 100%; padding: 13px 14px; border-radius: 10px; font-size: 15px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: var(--text);
+    }
+    input:focus { outline: none; border-color: var(--gold-mid); }
+    button {
+      width: 100%; margin-top: 24px; padding: 14px; border: 0; border-radius: 10px; cursor: pointer;
+      font-size: 15px; font-weight: 600; color: #1c1300;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-mid) 45%, var(--gold-dark));
+    }
+    button:disabled { opacity: .55; cursor: default; }
+    .uzenet { margin-top: 18px; font-size: 14px; line-height: 1.5; padding: 12px 14px; border-radius: 10px; display: none; }
+    .hiba { background: rgba(255,86,86,.12); border: 1px solid rgba(255,86,86,.35); color: #ffb3b3; }
+    .siker { background: rgba(120,220,150,.12); border: 1px solid rgba(120,220,150,.35); color: #b6e9c6; }
+    .lab { margin-top: 26px; font-size: 12px; color: var(--muted); text-align: center; }
+    .lab a { color: var(--gold-mid); }
+  </style>
+</head>
+<body>
+  <main class="kartya">
+    <h1>Új jelszó</h1>
+    <p class="alcim">Add meg az új jelszavadat. Ezután az új jelszóval tudsz belépni az Anurába.</p>
+
+    <form id="urlap">
+      <label for="jelszo">Új jelszó (legalább 8 karakter)</label>
+      <input type="password" id="jelszo" autocomplete="new-password" minlength="8" required>
+
+      <label for="jelszo2">Új jelszó még egyszer</label>
+      <input type="password" id="jelszo2" autocomplete="new-password" minlength="8" required>
+
+      <button type="submit" id="gomb">Jelszó mentése</button>
+    </form>
+
+    <div class="uzenet" id="uzenet"></div>
+    <p class="lab">Nem te kérted? Egyszerűen hagyd figyelmen kívül – <a href="/">anuraapp.hu</a></p>
+  </main>
+
+  <script>
+    const SZERVER = "https://anura-1apx.onrender.com";
+    const token = new URLSearchParams(location.search).get("token");
+    const uzenet = document.getElementById("uzenet");
+    const gomb = document.getElementById("gomb");
+
+    function mutat(szoveg, tipus) {
+      uzenet.textContent = szoveg;
+      uzenet.className = "uzenet " + tipus;
+      uzenet.style.display = "block";
+    }
+
+    // Hiányzó token: ne engedjük végigcsinálni az űrlapot, hogy aztán a végén
+    // derüljön ki a baj.
+    if (!token) {
+      document.getElementById("urlap").style.display = "none";
+      mutat("Ez a link hiányos. Kérj újat a bejelentkezési képernyőn.", "hiba");
+    }
+
+    document.getElementById("urlap").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const jelszo = document.getElementById("jelszo").value;
+      const jelszo2 = document.getElementById("jelszo2").value;
+
+      if (jelszo !== jelszo2) { mutat("A két jelszó nem egyezik.", "hiba"); return; }
+      if (jelszo.length < 8) { mutat("A jelszó legyen legalább 8 karakter.", "hiba"); return; }
+
+      gomb.disabled = true;
+      gomb.textContent = "Mentés…";
+      try {
+        const valasz = await fetch(SZERVER + "/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: token, newPassword: jelszo })
+        });
+        const adat = await valasz.json().catch(() => ({}));
+        if (valasz.ok) {
+          document.getElementById("urlap").style.display = "none";
+          mutat("Kész! A jelszavad megváltozott – lépj be az appban az újjal.", "siker");
+        } else {
+          // A szerver érthető magyar indoklást ad (lejárt/elhasznált link).
+          mutat(adat.reason || "Nem sikerült a mentés. Kérj új linket a bejelentkezési képernyőn.", "hiba");
+          gomb.disabled = false;
+          gomb.textContent = "Jelszó mentése";
+        }
+      } catch (hiba) {
+        // A szerver ingyenes csomagon néha lassan ébred - ezt mondjuk is meg,
+        // ahelyett hogy általános hibát írnánk ki.
+        mutat("Nem sikerült elérni a szervert. Ellenőrizd az internetkapcsolatot, és próbáld újra.", "hiba");
+        gomb.disabled = false;
+        gomb.textContent = "Jelszó mentése";
+      }
+    });
+  </script>
+</body>
+</html>
