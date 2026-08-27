@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facebook-oldal létrehozása – Anura</title>
+<meta name="description" content="Miért kell Facebook-oldal az Anurához, és hogyan hozd létre pár perc alatt – anélkül, hogy elveszítenéd a vendégeidet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold-light:#F7DFA6; --gold-mid:#E3B45E; --gold-dark:#B8842C;
+    --bg:#060B18; --card:#101B33; --text:#F5F5F7; --muted:#9AA3B2;
+    --line:rgba(227,180,94,.22);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:linear-gradient(180deg,#101B33 0%,#060B18 60%);
+    color:var(--text); font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--gold-mid);}
+  .wrap{max-width:760px; margin:0 auto; padding:32px 22px 80px;}
+
+  /* fejléc */
+  .vissza{display:inline-flex; align-items:center; gap:7px; color:var(--muted); text-decoration:none; font-size:14px;}
+  .vissza:hover{color:var(--gold-mid);}
+  header{margin:34px 0 44px;}
+  h1{
+    font-family:"Cormorant Garamond",Georgia,serif; font-weight:700;
+    font-size:clamp(30px,6vw,44px); line-height:1.15; margin:0 0 14px; color:var(--gold-light);
+  }
+  .alcim{color:var(--muted); font-size:17px; margin:0; max-width:60ch;}
+
+  h2{
+    font-family:"Cormorant Garamond",Georgia,serif; font-weight:600;
+    font-size:clamp(23px,4.6vw,30px); color:var(--gold-light);
+    margin:52px 0 14px; line-height:1.25;
+  }
+  h3{font-size:17px; font-weight:600; margin:26px 0 8px; color:var(--text);}
+  p{margin:0 0 15px; max-width:66ch;}
+
+  /* kiemelt doboz */
+  .doboz{
+    background:rgba(255,255,255,.035); border:1px solid var(--line);
+    border-radius:14px; padding:20px 22px; margin:24px 0;
+  }
+  .doboz p:last-child{margin-bottom:0;}
+  .doboz-cim{font-weight:600; color:var(--gold-light); margin:0 0 8px;}
+
+  /* lépések */
+  ol.lepesek{list-style:none; counter-reset:l; padding:0; margin:26px 0;}
+  ol.lepesek > li{
+    counter-increment:l; position:relative; padding:0 0 26px 54px; margin:0;
+  }
+  ol.lepesek > li::before{
+    content:counter(l); position:absolute; left:0; top:-2px;
+    width:34px; height:34px; border-radius:50%;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold-mid) 45%,var(--gold-dark));
+    color:#1c1300; font-weight:600; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* összekötő vonal a körök között */
+  ol.lepesek > li:not(:last-child)::after{
+    content:""; position:absolute; left:16.5px; top:36px; bottom:6px;
+    width:1px; background:linear-gradient(180deg,var(--line),transparent);
+  }
+  ol.lepesek > li > strong{display:block; font-size:17px; margin-bottom:5px;}
+  ol.lepesek p{margin:0 0 10px;}
+
+  ul.pontok{margin:10px 0 15px; padding-left:20px;}
+  ul.pontok li{margin-bottom:7px;}
+
+  .gomb{
+    display:inline-block; margin:6px 0 4px; padding:12px 22px; border-radius:10px;
+    background:linear-gradient(135deg,var(--gold-light),var(--gold-mid) 45%,var(--gold-dark));
+    color:#1c1300; font-weight:600; text-decoration:none; font-size:15px;
+  }
+  .halvany{font-size:14px; color:var(--muted);}
+  .figyelem{border-color:rgba(227,180,94,.5); background:rgba(227,180,94,.07);}
+
+  footer{
+    margin-top:70px; padding-top:26px; border-top:1px solid rgba(255,255,255,.08);
+    color:var(--muted); font-size:13.5px;
+  }
+  footer a{color:var(--gold-mid);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="vissza" href="/">← Vissza a főoldalra</a>
+
+  <header>
+    <h1>Facebook-oldal a vállalkozásodnak</h1>
+    <p class="alcim">
+      Ahhoz, hogy az Anura kezelni tudja a vendégeid üzeneteit, egy Facebook-<em>oldalra</em>
+      van szükség. Itt elmagyarázzuk, miért — és végigvezetünk rajta. Nagyjából öt perc,
+      és nem kerül semmibe.
+    </p>
+  </header>
+
+  <h2>Miért nem elég a személyes profilod?</h2>
+
+  <p>
+    Ez jogos kérdés, és a válasz nem nálunk dől el. A Facebook <strong>egyetlen
+    alkalmazásnak sem engedi</strong>, hogy hozzáférjen egy személyes profil üzeneteihez —
+    sem nekünk, sem másnak.
+  </p>
+
+  <p>
+    És ez így helyes. A személyes postaládádban ott vannak a családi beszélgetések,
+    a barátaid üzenetei, a magánügyeid. Ha egy alkalmazás beleláthatna, az sokkal
+    nagyobb baj lenne, mint amennyi hasznot hozna.
+  </p>
+
+  <div class="doboz">
+    <p class="doboz-cim">Amit ebből nyersz</p>
+    <p>
+      A vendégeid üzenetei <strong>külön postaládába</strong> érkeznek, nem keverednek
+      a magánbeszélgetéseiddel. Este nem kell a nagynénéd üzenete és egy időpontkérés
+      között váltogatnod — és nem is csúszik el egyik sem a másik miatt.
+    </p>
+  </div>
+
+  <h2>Amit nem veszítesz el</h2>
+
+  <p>
+    A leggyakoribb aggály ez szokott lenni: <em>„a vendégeim engem ismernek, nem egy
+    céges oldalt."</em> Érthető, de a valóság megnyugtatóbb:
+  </p>
+
+  <ul class="pontok">
+    <li><strong>A személyes profilod megmarad</strong> érintetlenül. Nem alakul át, nem tűnik el, nem lesz belőle céges fiók.</li>
+    <li><strong>Az ismerőseid megmaradnak.</strong> Az Oldal külön dolog — te kezeled, a saját profilodból.</li>
+    <li><strong>Meg tudod hívni őket</strong> az új Oldal követésére, egyetlen gombbal. Vagyis nem nulláról indulsz.</li>
+    <li><strong>Nem kell külön belépned.</strong> Ugyanazzal a fiókkal kezeled, amivel eddig is Facebookoztál.</li>
+  </ul>
+
+  <h2>Így hozod létre</h2>
+
+  <p class="halvany">
+    A Facebook időnként átrendezi a felületét, ezért a feliratok kicsit eltérhetnek attól,
+    amit itt írunk — a lépések sorrendje viszont ugyanez marad.
+  </p>
+
+  <ol class="lepesek">
+    <li>
+      <strong>Nyisd meg az oldal-létrehozót</strong>
+      <p>Jelentkezz be a Facebookra a saját fiókoddal, és nyisd meg ezt a lapot:</p>
+      <a class="gomb" href="https://www.facebook.com/pages/create" target="_blank" rel="noopener">Facebook-oldal létrehozása</a>
+      <p class="halvany">
+        Telefonon: menü (☰) → <em>Oldalak</em> → <em>Létrehozás</em>.
+      </p>
+    </li>
+
+    <li>
+      <strong>Add meg az Oldal nevét</strong>
+      <p>
+        Azt a nevet írd be, <strong>ahogy a vendégeid keresnek rád</strong> — például
+        „Anna Körömszalon" vagy „Kiss Éva fodrász". Ha a saját nevedet használod
+        vállalkozásként, nyugodtan az legyen.
+      </p>
+    </li>
+
+    <li>
+      <strong>Válassz kategóriát</strong>
+      <p>
+        Kezdd el beírni a szakmádat — <em>fodrász</em>, <em>kozmetikus</em>,
+        <em>műkörmös</em>, <em>szépségszalon</em> —, és válassz a felkínált listából.
+        Ez segít, hogy a keresésben megtaláljanak.
+      </p>
+    </li>
+
+    <li>
+      <strong>Hozd létre, majd töltsd fel a képeket</strong>
+      <p>
+        A profilkép lehet a logód vagy egy jó fotó rólad; borítóképnek jól működik egy
+        munkádról készült kép. Ezt később bármikor cserélheted.
+      </p>
+    </li>
+
+    <li>
+      <strong>Hívd meg az ismerőseidet</strong>
+      <p>
+        A Facebook felajánlja, hogy meghívja őket az Oldal követésére. Élj vele — így a
+        meglévő ismeretségi köröd az első naptól látja az Oldalt.
+      </p>
+    </li>
+
+    <li>
+      <strong>Gyere vissza az Anurába</strong>
+      <p>
+        Beállítások → <em>Csatornák</em> → <em>Messenger összekötése</em>. Most már meg
+        fog jelenni az új Oldalad a listában — pipáld be, és kész.
+      </p>
+    </li>
+  </ol>
+
+  <h2>És az Instagram?</h2>
+
+  <p>
+    Ott ugyanez a szabály: az Anura csak <strong>professzionális</strong> (Üzleti vagy
+    Alkotói) Instagram-fiókkal tud dolgozni. Az átváltás ingyenes, egy percbe telik,
+    és <strong>bármikor visszaállítható</strong>.
+  </p>
+
+  <p>
+    Az Instagram appban: <em>Profil</em> → menü (☰) → <em>Beállítások</em> →
+    <em>Fióktípus és eszközök</em> → <em>Váltás professzionális fiókra</em>.
+    A felhasználóneved, a követőid és a posztjaid nem változnak.
+  </p>
+
+  <div class="doboz figyelem">
+    <p class="doboz-cim">Két dolog, amit tudnod kell előre</p>
+    <p>
+      <strong>1. A professzionális fiók nem lehet zárt.</strong> Ha ma privát a fiókod,
+      az átváltással nyilvánossá válik. Egy szolgáltatónál ez általában nem gond — sőt,
+      cél —, de jobb, ha nem meglepetésként ér.
+    </p>
+    <p>
+      <strong>2. Az Instagram-fiókot össze kell kapcsolni a Facebook-oldaladdal.</strong>
+      Ezt a lépést szokták kihagyni, és utána nem érti senki, miért nem működik.
+      Az Instagram beállításaiban vagy az Oldal beállításainál teheted meg — enélkül
+      az Anura nem találja meg a fiókodat.
+    </p>
+  </div>
+
+  <h2>Elakadtál?</h2>
+
+  <p>
+    Írj nekünk, és végigmegyünk rajta együtt — nem kell egyedül bogarásznod.
+    <a href="mailto:support@anuraapp.hu">support@anuraapp.hu</a>
+  </p>
+
+  <footer>
+    <a href="/">Anura főoldal</a> &nbsp;·&nbsp;
+    <a href="privacy.html">Adatvédelmi szabályzat</a> &nbsp;·&nbsp;
+    <a href="mailto:hello@anuraapp.hu">hello@anuraapp.hu</a>
+    <div style="margin-top:12px;">© 2026 Anura</div>
+  </footer>
+
+</div>
+</body>
+</html>
