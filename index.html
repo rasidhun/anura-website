@@ -196,6 +196,31 @@
     max-width: 1180px; margin: 40px auto 0; padding-top: 24px;
     border-top: 1px solid rgba(255,255,255,.06); font: 400 12.5px Inter, sans-serif; color: rgba(255,255,255,.3);
   }
+
+  /* ── Várólista-űrlap ────────────────────────────────────────────────── */
+  .varolista{max-width:520px;margin:22px auto 0;display:flex;flex-direction:column;gap:12px;text-align:left;}
+  .varolista-sor{display:flex;gap:10px;flex-wrap:wrap;}
+  .varolista input[type=email],.varolista select{
+    flex:1 1 200px;min-width:0;padding:13px 15px;border-radius:10px;
+    border:1px solid rgba(227,180,94,.35);background:rgba(255,255,255,.06);
+    color:#F5F5F7;font-size:15px;font-family:inherit;}
+  .varolista input[type=email]::placeholder{color:#9AA3B2;}
+  .varolista select{color:#9AA3B2;}
+  .varolista select:valid{color:#F5F5F7;}
+  .varolista input[type=email]:focus-visible,.varolista select:focus-visible,
+  .varolista button:focus-visible,.varolista input[type=checkbox]:focus-visible{
+    outline:2px solid #E3B45E;outline-offset:2px;}
+  .varolista-consent{display:flex;gap:10px;align-items:flex-start;
+    font-size:13.5px;line-height:1.5;color:#9AA3B2;cursor:pointer;}
+  .varolista-consent input{margin-top:3px;flex:0 0 auto;width:16px;height:16px;accent-color:#E3B45E;}
+  .varolista-consent a{color:#E3B45E;}
+  .varolista button{border:0;cursor:pointer;font-size:15px;justify-content:center;}
+  .varolista button[disabled]{opacity:.6;cursor:default;}
+  .varolista-uzenet{margin:0;font-size:14px;min-height:1.2em;}
+  .varolista-uzenet.ok{color:#7FD1A0;}
+  .varolista-uzenet.hiba{color:#F0A08A;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 </style>
 </head>
 <body>
@@ -417,11 +442,39 @@
 <!-- CTA -->
 <div id="letoltes" class="cta-section">
   <h2 class="serif">Kezdj hozzá még ma.</h2>
-  <p>Az Anura hamarosan elérhető az App Store-ban. Írj nekünk, és elsőként értesítünk az indulásról.</p>
-  <a href="mailto:hello@anuraapp.hu?subject=Anura%20-%20%C3%A9rtes%C3%ADts%20az%20ind%C3%BAl%C3%A1sr%C3%B3l" class="btn-gold gold-bg">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7l9 6 9-6" stroke="#100E1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="5" width="18" height="14" rx="2" stroke="#100E1A" stroke-width="1.8"/></svg>
-    Értesülj az indulásról
-  </a>
+  <p>Az Anura hamarosan indul. Írd be az e-mail címed, és az elsők között értesítünk.</p>
+
+  <!-- ⚠️ Korábban itt egy mailto: link állt. Mobilon - ahonnan a közösségi
+       médiából érkező forgalom szinte teljes egésze jön - az megnyitja a
+       levelezőt üres tárggyal, és a látogatók túlnyomó része ott elveszik.
+       Ráadásul nem lett belőle lista, és nem derült ki, melyik poszt hozta őket. -->
+  <form id="varolista-form" class="varolista" novalidate>
+    <div class="varolista-sor">
+      <label class="sr-only" for="vl-email">E-mail cím</label>
+      <input id="vl-email" name="email" type="email" inputmode="email"
+             autocomplete="email" required placeholder="E-mail címed">
+      <label class="sr-only" for="vl-szakma">Szakma</label>
+      <select id="vl-szakma" name="profession">
+        <option value="">Mivel foglalkozol?</option>
+        <option>Fodrászat</option>
+        <option>Hajhosszabbítás</option>
+        <option>Kozmetika</option>
+        <option>Műköröm</option>
+        <option>Szempilla</option>
+        <option>Sminktetoválás</option>
+        <option>Masszázs</option>
+        <option>Egyéb</option>
+      </select>
+    </div>
+    <label class="varolista-consent">
+      <input type="checkbox" name="consent" required>
+      <span>Hozzájárulok, hogy az indulásról e-mailben értesítsetek.
+        A címemet másra nem használjuk, harmadik félnek nem adjuk ki.
+        <a href="privacy.html">Adatvédelmi tájékoztató</a></span>
+    </label>
+    <button type="submit" class="btn-gold gold-bg">Értesíts az indulásról</button>
+    <p id="varolista-uzenet" class="varolista-uzenet" role="status" aria-live="polite"></p>
+  </form>
 </div>
 
 <!-- FOOTER -->
@@ -471,5 +524,67 @@
   </div>
 </footer>
 
+
+<script>
+(function () {
+  var API = "https://anura-1apx.onrender.com";
+  var form = document.getElementById("varolista-form");
+  if (!form) return;
+  var uzenet = document.getElementById("varolista-uzenet");
+  var gomb = form.querySelector("button");
+
+  // Honnan érkezett? Ebből derül ki, MELYIK poszt hozta a feliratkozót -
+  // enélkül a kampány végén csak annyit tudnánk, hogy vannak feliratkozók.
+  function forras() {
+    var p = new URLSearchParams(location.search);
+    return p.get("utm_source") || p.get("forras") || (document.referrer ? "web" : "kozvetlen");
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = form.email.value.trim();
+    if (!form.consent.checked) {
+      uzenet.className = "varolista-uzenet hiba";
+      uzenet.textContent = "A feliratkozáshoz pipáld be a hozzájárulást.";
+      return;
+    }
+    if (email.indexOf("@") < 1 || email.indexOf(".", email.indexOf("@")) < 0) {
+      uzenet.className = "varolista-uzenet hiba";
+      uzenet.textContent = "Ellenőrizd az e-mail címet.";
+      return;
+    }
+    gomb.disabled = true;
+    gomb.textContent = "Küldés…";
+    uzenet.textContent = "";
+
+    fetch(API + "/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        profession: form.profession.value || null,
+        source: forras(),
+        consent: true
+      })
+    }).then(function (r) {
+      return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+    }).then(function (v) {
+      if (!v.ok) throw new Error(v.d && v.d.reason ? v.d.reason : "hiba");
+      uzenet.className = "varolista-uzenet ok";
+      uzenet.textContent = v.d.message || "Köszönjük! Küldtünk egy visszaigazoló levelet.";
+      form.reset();
+      gomb.textContent = "Fent vagy a listán ✓";
+    }).catch(function (err) {
+      uzenet.className = "varolista-uzenet hiba";
+      // ⚠️ A szerver ingyenes csomagon alszik el; az első kérés lassú lehet.
+      uzenet.textContent = (err && err.message && err.message.length < 120)
+        ? err.message
+        : "Most nem sikerült. Próbáld újra, vagy írj: hello@anuraapp.hu";
+      gomb.disabled = false;
+      gomb.textContent = "Értesíts az indulásról";
+    });
+  });
+})();
+</script>
 </body>
 </html>
